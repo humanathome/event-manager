@@ -4,7 +4,8 @@ Project link: [Event manager](https://www.theodinproject.com/lessons/ruby-event-
 
 ### Description
 This is a tutorial project that has been adapted from The Turing School’s and Jump Start Lab’s 
-[Event Manager](http://tutorials.jumpstartlab.com/projects/eventmanager.html) and updated to use GoogleCivic API.
+[Event Manager](http://tutorials.jumpstartlab.com/projects/eventmanager.html) and updated to use GoogleCivic API.  
+
 `google-api-client` gem used in the tutorial at the point of doing this project is deprecated and has been replaced
 with `google-apis-civicinfo_v2` gem. 
 
@@ -16,7 +17,7 @@ Goals of this project are:
 - utilize the data to contact a remote service
 - populate a template with user data
 - manipulate strings
-- access Google’s Civic Information API through the Google API Client Gem
+- access Google’s Civic Information API through the [google-apis-civicinfo_v2](https://rubygems.org/gems/google-apis-civicinfo_v2) gem
 - use ERB (Embedded Ruby) for templating
 
 ### Tasks
