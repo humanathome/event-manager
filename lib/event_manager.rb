@@ -19,6 +19,14 @@ def clean_phone_number(phone_number)
   end
 end
 
+def find_registration_hour(registration_date)
+  Time.strptime(registration_date, '%m/%d/%y %H:%M').hour
+end
+
+def find_registration_day(registration_date)
+  Time.strptime(registration_date, '%m/%d/%y %H:%M').strftime('%A')
+end
+
 def legislators_by_zipcode(zip)
   civic_info = Google::Apis::CivicinfoV2::CivicInfoService.new
   civic_info.key = 'AIzaSyClRzDqDh5MsXwnCWi0kOiiBivP6JsSyBw'
@@ -54,6 +62,8 @@ contents = CSV.open(
 
 template_letter = File.read('form_letter.erb')
 erb_template = ERB.new template_letter
+registration_hours_array = []
+registration_days_array = []
 
 contents.each do |row|
   id = row[0]
@@ -63,6 +73,15 @@ contents.each do |row|
   phone_number = clean_phone_number(row[:homephone])
   legislators = legislators_by_zipcode(zipcode)
 
+  registration_hours_array << find_registration_hour(row[:regdate])
+  registration_days_array << find_registration_day(row[:regdate])
+
   form_letter = erb_template.result(binding)
   save_thank_you_letter(id, form_letter)
 end
+
+peak_registration_hours = registration_hours_array.tally.max_by { |_k, v| v }
+peak_registration_days = registration_days_array.tally.max_by { |_k, v| v }
+
+puts "Peak registration hour is: #{peak_registration_hours[0]}, where #{peak_registration_hours[1]} people registered."
+puts "Peak registration day is: #{peak_registration_days[0]}, where #{peak_registration_days[1]} people registered."
