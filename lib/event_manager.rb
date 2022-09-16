@@ -29,6 +29,20 @@ def find_registration_day(registration_date)
   Date.strptime(reg_date, '%m/%d/%y').strftime('%A')
 end
 
+def find_max_values(registration_times)
+  registration_times.find_all { |_k, v| v == registration_times.values.max }
+end
+
+def display_peak_reg_times(hours, days)
+  peak_hours = hours.map(&:first).join(', ')
+  people_per_hour = hours.map(&:last).uniq.join(', ')
+  puts "The peak hour(s) for registration are #{peak_hours} where #{people_per_hour} people registered per hour."
+
+  peak_days = days.map(&:first).join(', ')
+  people_per_day = days.map(&:last).uniq.join(', ')
+  puts "The peak day(s) for registration are #{peak_days} where #{people_per_day} people registered per day."
+end
+
 def legislators_by_zipcode(zip)
   civic_info = Google::Apis::CivicinfoV2::CivicInfoService.new
   civic_info.key = 'AIzaSyClRzDqDh5MsXwnCWi0kOiiBivP6JsSyBw'
@@ -82,8 +96,12 @@ contents.each do |row|
   save_thank_you_letter(id, form_letter)
 end
 
-peak_registration_hours = registration_hours_array.tally.max_by { |_k, v| v }
-peak_registration_days = registration_days_array.tally.max_by { |_k, v| v }
+hours_hash = registration_hours_array.tally
+days_hash = registration_days_array.tally
 
-puts "Peak registration hour is: #{peak_registration_hours[0]}, where #{peak_registration_hours[1]} people registered."
-puts "Peak registration day is: #{peak_registration_days[0]}, where #{peak_registration_days[1]} people registered."
+peak_hours = find_max_values(hours_hash)
+peak_days = find_max_values(days_hash)
+
+display_peak_reg_times(peak_hours, peak_days)
+
+puts 'Event manager complete.'
