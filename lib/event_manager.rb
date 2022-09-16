@@ -20,11 +20,13 @@ def clean_phone_number(phone_number)
 end
 
 def find_registration_hour(registration_date)
-  Time.strptime(registration_date, '%m/%d/%y %H:%M').hour
+  reg_time = registration_date.split(' ')[1]
+  Time.strptime(reg_time, '%H:%M').strftime('%-I %p')
 end
 
 def find_registration_day(registration_date)
-  Time.strptime(registration_date, '%m/%d/%y %H:%M').strftime('%A')
+  reg_date = registration_date.split(' ')[0]
+  Date.strptime(reg_date, '%m/%d/%y').strftime('%A')
 end
 
 def legislators_by_zipcode(zip)
